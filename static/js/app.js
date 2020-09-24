@@ -1,6 +1,3 @@
-// TODO when form is cleared, populate table with all data again
-// TODO add message when no results are found
-
 // from data.js
 var tableData = data;
 
@@ -8,31 +5,19 @@ var tableData = data;
 var tbody = d3.select("tbody");
 var tableObject = d3.select("#ufo-table");
 var filterButton = d3.select("#filter-btn");
+var form = d3.select("#form");
+var noData = d3.select("#no-data");
 
 // loop through all data & add to the table
 tableData.forEach(populateTable);
 
-// listen for events and search through the date/time column to find rows that match user input
-// form button: id="filter-btn"
-// input area: id="datetime"
-filterButton.on("click", function() {
-    // Get form text
-    var formInput = d3.select("#datetime");
-    var formInputValue = formInput.property("value");
-  
-    // Filter table on date
-    var filteredData = tableData.filter(sighting => sighting.datetime === formInputValue);
-    console.log(filteredData);
-    // clear the table
-    tbody.html("");
-    // add the filtered data by calling the populateTable function
-    filteredData.forEach(populateTable);
-  
-});
-
+// Create event handlers 
+filterButton.on("click", runEnter);
+form.on("submit",runEnter);
 
 // function to populate table
 function populateTable(tableData) {
+
     // append a new row to the table
     var newRow = tbody.append("tr");
 
@@ -47,6 +32,36 @@ function populateTable(tableData) {
     });
 }
 
+function runEnter() {
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
+
+    // Get form text
+    var formInput = d3.select("#datetime");
+    var formInputValue = formInput.property("value");
+
+    // Reload all data if no data entered 
+    if (formInputValue === "") {
+        tableData.forEach(populateTable);
+    }
+
+    else {
+        // Filter table on date
+        var filteredData = tableData.filter(sighting => sighting.datetime === formInputValue);
+        
+        if (filteredData.length === 0) {
+            noData.text(`No data found on date ${formInputValue}`);
+        }
+        else {
+            // clear the data
+            noData.text("");
+            tbody.html("");
+            // add the filtered data by calling the populateTable function
+            filteredData.forEach(populateTable);
+        }
+    }
+    
+};
 
 
 
