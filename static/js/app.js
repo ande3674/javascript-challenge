@@ -1,5 +1,6 @@
 // from data.js
 var tableData = data;
+//console.log(tableData[0]["datetime"]);
 
 // Get a reference to the dom objects
 var tbody = d3.select("tbody");
@@ -23,8 +24,6 @@ function populateTable(tableData) {
 
     // add value from each key-value pair to its table cell
     Object.entries(tableData).forEach(function([key, val]) {
-        console.log(key, val);
-
         // append a cell
         var newCell = newRow.append("td");
         // write value to cell
@@ -36,21 +35,42 @@ function runEnter() {
     // Prevent the page from refreshing
     d3.event.preventDefault();
 
-    // Get form text
-    var formInput = d3.select("#datetime");
-    var formInputValue = formInput.property("value");
+    // Get form date text
+    var formDateInput = d3.select("#datetime");
+    var formDateInputValue = formDateInput.property("value");
+    console.log(formDateInputValue);
+    // Get form city text
+    var formCityInput = d3.select("#city");
+    var formCityInputValue = formCityInput.property("value");
+    console.log(formCityInputValue);
+    // Add search terms to array:
+    var searchTermDict = {"datetime": formDateInputValue, "city": formCityInputValue};
 
     // Reload all data if no data entered 
-    if (formInputValue === "") {
+    if (formDateInputValue === "" && formCityInputValue === "") {
+        noData.text("");
+        tbody.html("");
         tableData.forEach(populateTable);
     }
 
     else {
-        // Filter table on date
-        var filteredData = tableData.filter(sighting => sighting.datetime === formInputValue);
+        noData.text("");
+        tbody.html("");
+        // Filter table
+        var filteredData = [];
+        Object.entries(searchTermDict).forEach(([key, val]) => {
+            console.log(key);
+            var tempFilteredData = tableData.filter(sighting => sighting[key] === val);
+            console.log(tempFilteredData);
+            // filteredData.push(tempFilteredData);
+            tempFilteredData.forEach((s) => {
+                filteredData.push(s);
+            });
+        });
         
+        // Fill table with the data
         if (filteredData.length === 0) {
-            noData.text(`No data found on date ${formInputValue}`);
+            noData.text(`No data found on date ${formDateInputValue}`);
         }
         else {
             // clear the data
