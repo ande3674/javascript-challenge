@@ -59,13 +59,15 @@ function runEnter() {
         // Filter table
         var filteredData = [];
         Object.entries(searchTermDict).forEach(([key, val]) => {
-            console.log(key);
-            var tempFilteredData = tableData.filter(sighting => sighting[key] === val);
-            console.log(tempFilteredData);
-            // filteredData.push(tempFilteredData);
-            tempFilteredData.forEach((s) => {
-                filteredData.push(s);
-            });
+            console.log(val);
+            if (val !== "") {
+                var tempFilteredData = tableData.filter(sighting => sighting[key] === val);
+                console.log(tempFilteredData);
+                // filteredData.push(tempFilteredData);
+                tempFilteredData.forEach((s) => {
+                    filteredData.push(s);
+                });
+            };
         });
         
         // Fill table with the data
