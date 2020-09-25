@@ -36,18 +36,22 @@ function runEnter() {
     d3.event.preventDefault();
 
     // Get form date text
-    var formDateInput = d3.select("#datetime");
-    var formDateInputValue = formDateInput.property("value");
-    console.log(formDateInputValue);
+    var formDateInputValue = d3.select("#datetime").property("value");
     // Get form city text
-    var formCityInput = d3.select("#city");
-    var formCityInputValue = formCityInput.property("value");
-    console.log(formCityInputValue);
+    var formCityInputValue = d3.select("#city").property("value");
+    // Get form state text
+    var formStateInputValue = d3.select("#state").property("value");
+    console.log(formStateInputValue);
+    // Get form country text
+    var formCountryInputValue = d3.select("#country").property("value");
+    // Get form shape text
+    var formShapeInputValue = d3.select("#shape").property("value");
+
     // Add search terms to array:
-    var searchTermDict = {"datetime": formDateInputValue, "city": formCityInputValue};
+    var searchTermDict = {"datetime": formDateInputValue, "city": formCityInputValue, "state": formStateInputValue, "country": formCountryInputValue, "shape": formShapeInputValue};
 
     // Reload all data if no data entered 
-    if (formDateInputValue === "" && formCityInputValue === "") {
+    if (formDateInputValue === "" && formCityInputValue === "" && formStateInputValue === "" && formCountryInputValue === "" && formShapeInputValue === "") {
         noData.text("");
         tbody.html("");
         tableData.forEach(populateTable);
@@ -63,7 +67,6 @@ function runEnter() {
             if (val !== "") {
                 var tempFilteredData = tableData.filter(sighting => sighting[key] === val);
                 console.log(tempFilteredData);
-                // filteredData.push(tempFilteredData);
                 tempFilteredData.forEach((s) => {
                     filteredData.push(s);
                 });
