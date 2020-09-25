@@ -1,6 +1,5 @@
 // from data.js
 var tableData = data;
-//console.log(tableData[0]["datetime"]);
 
 // Get a reference to the dom objects
 var tbody = d3.select("tbody");
@@ -18,7 +17,6 @@ form.on("submit",runEnter);
 
 // function to populate table
 function populateTable(tableData) {
-
     // append a new row to the table
     var newRow = tbody.append("tr");
 
@@ -41,16 +39,19 @@ function runEnter() {
     var formCityInputValue = d3.select("#city").property("value");
     // Get form state text
     var formStateInputValue = d3.select("#state").property("value");
-    console.log(formStateInputValue);
     // Get form country text
     var formCountryInputValue = d3.select("#country").property("value");
     // Get form shape text
     var formShapeInputValue = d3.select("#shape").property("value");
 
     // Add search terms to array:
-    var searchTermDict = {"datetime": formDateInputValue, "city": formCityInputValue, "state": formStateInputValue, "country": formCountryInputValue, "shape": formShapeInputValue};
+    var searchTermDict = {  "datetime": formDateInputValue, 
+                            "city": formCityInputValue, 
+                            "state": formStateInputValue, 
+                            "country": formCountryInputValue, 
+                            "shape": formShapeInputValue };
 
-    // Reload all data if no data entered 
+    // Reload all data if no data entered into search fields
     if (formDateInputValue === "" && formCityInputValue === "" && formStateInputValue === "" && formCountryInputValue === "" && formShapeInputValue === "") {
         noData.text("");
         tbody.html("");
@@ -58,31 +59,29 @@ function runEnter() {
     }
 
     else {
+        // clear fields
         noData.text("");
         tbody.html("");
+
         // Filter table
-        var filteredData = [];
+        var filteredDataAND = tableData;
         Object.entries(searchTermDict).forEach(([key, val]) => {
-            console.log(val);
             if (val !== "") {
-                var tempFilteredData = tableData.filter(sighting => sighting[key] === val);
-                console.log(tempFilteredData);
-                tempFilteredData.forEach((s) => {
-                    filteredData.push(s);
-                });
+                filteredDataAND = filteredDataAND.filter(sighting => sighting[key] === val);
+                console.log(filteredDataAND);
             };
         });
         
         // Fill table with the data
-        if (filteredData.length === 0) {
+        if (filteredDataAND.length === 0) { // display message if no matching results
             noData.text(`No data found on date ${formDateInputValue}`);
         }
         else {
-            // clear the data
+            // clear fields
             noData.text("");
             tbody.html("");
             // add the filtered data by calling the populateTable function
-            filteredData.forEach(populateTable);
+            filteredDataAND.forEach(populateTable);
         }
     }
     
