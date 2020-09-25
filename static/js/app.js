@@ -55,7 +55,6 @@ function runEnter() {
 
     else {
         clearStuff();
-        // Filter table
         var filteredDataAND = tableData;
         Object.entries(searchTermDict).forEach(([key, val]) => {
             if (val !== "") {
