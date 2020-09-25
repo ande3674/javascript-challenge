@@ -29,19 +29,20 @@ function populateTable(tableData) {
     });
 }
 
+function clearStuff() {
+    noData.text("");
+    tbody.html("");
+}
+
 function runEnter() {
     // Prevent the page from refreshing
     d3.event.preventDefault();
 
-    // Get form date text
+    // Get form text
     var formDateInputValue = d3.select("#datetime").property("value");
-    // Get form city text
     var formCityInputValue = d3.select("#city").property("value");
-    // Get form state text
     var formStateInputValue = d3.select("#state").property("value");
-    // Get form country text
     var formCountryInputValue = d3.select("#country").property("value");
-    // Get form shape text
     var formShapeInputValue = d3.select("#shape").property("value");
 
     // Add search terms to array:
@@ -53,16 +54,12 @@ function runEnter() {
 
     // Reload all data if no data entered into search fields
     if (formDateInputValue === "" && formCityInputValue === "" && formStateInputValue === "" && formCountryInputValue === "" && formShapeInputValue === "") {
-        noData.text("");
-        tbody.html("");
+        clearStuff();
         tableData.forEach(populateTable);
     }
 
     else {
-        // clear fields
-        noData.text("");
-        tbody.html("");
-
+        clearStuff();
         // Filter table
         var filteredDataAND = tableData;
         Object.entries(searchTermDict).forEach(([key, val]) => {
@@ -72,22 +69,15 @@ function runEnter() {
             };
         });
         
-        // Fill table with the data
         if (filteredDataAND.length === 0) { // display message if no matching results
-            noData.text(`No data found on date ${formDateInputValue}`);
+            noData.text("No data found for search terms.");
         }
-        else {
-            // clear fields
-            noData.text("");
-            tbody.html("");
-            // add the filtered data by calling the populateTable function
+        else { // Fill table with the data
+            clearStuff();
             filteredDataAND.forEach(populateTable);
         }
-    }
-    
+    }   
 };
-
-
 
 
 
