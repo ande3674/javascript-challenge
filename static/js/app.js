@@ -17,14 +17,9 @@ form.on("submit",runEnter);
 
 // function to populate table
 function populateTable(tableData) {
-    // append a new row to the table
     var newRow = tbody.append("tr");
-
-    // add value from each key-value pair to its table cell
     Object.entries(tableData).forEach(function([key, val]) {
-        // append a cell
         var newCell = newRow.append("td");
-        // write value to cell
         newCell.text(val);
     });
 }
@@ -78,6 +73,4 @@ function runEnter() {
         }
     }   
 };
-
-
 
